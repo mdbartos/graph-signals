@@ -79,6 +79,29 @@
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+\AtBeginSubsection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsubsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
@@ -194,6 +217,8 @@ University of Michigan \\ % Your institution for the title page
 
 %------------------------------------------------
 
+\subsection{The Graph Fourier Transform}
+
 \begin{frame}
 \frametitle{Review of the Fourier Transform}
 
@@ -276,7 +301,7 @@ components.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Eigenvectors of the Laplacian of the Minnesota Road Network}
+  \frametitle{Example: Eigenvectors of the Laplacian of the Minnesota Road Network}
   \begin{columns}
     \begin{column}{0.5\textwidth}
 \begin{figure}
@@ -292,11 +317,13 @@ components.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Fourier transform of a graph signal on a ring graph}
+  \frametitle{Example: Fourier transform of a graph signal on a ring graph}
 \begin{figure}
 \includegraphics[width=0.7\linewidth]{../img/graph_fourier_transform_2.pdf}
 \end{figure}
 \end{frame}
+
+\subsection{Signal smoothness on a graph}
 
 \begin{frame}
   \frametitle{Signal smoothness depends on underlying structure of graph}
@@ -377,6 +404,8 @@ $S_2$ is small when $f$ has similar values at strongly-connected vertices.
   \end{block}
   
 \end{frame}
+
+\subsection{Graph signal operations}
 
 \begin{frame}
   \frametitle{Filtering in the frequency/graph spectral domain}
@@ -609,6 +638,7 @@ Where:
   \end{columns}
 \end{frame}
 
+\subsection{Graph coarsening, downsampling and reduction}
 
 \begin{frame}
   \frametitle{Graph coarsening, downsampling and reduction}
@@ -639,6 +669,7 @@ Where:
 \end{figure}
 \end{frame}
 
+\subsection{Graph wavelets}
 
 \begin{frame}
   \frametitle{Localized multiscale transforms}
