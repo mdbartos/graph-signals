@@ -117,6 +117,11 @@ University of Michigan \\ % Your institution for the title page
 \frametitle{Other work on graph signals}
 
 \begin{description}
+\item[\textbf{SNFOV}] Shuman, D. I., Narang, S. K., Frossard, P., Ortega, A., \&
+  Vandergheynst, P. (2013). The emerging field of signal processing on graphs:
+  Extending high-dimensional data analysis to networks and other irregular
+  domains. Signal Processing Magazine, IEEE, 30(3), 83-98.
+
 \item[ZFC] Zhang, C., Florencio, D., \& Chou, P. A. (2015). Graph signal processing: a
   probabilistic framework. Microsoft Res., Redmond, WA, USA, Tech. Rep.
   MSR-TR-2015-31.
@@ -136,10 +141,36 @@ University of Michigan \\ % Your institution for the title page
 
 \begin{frame}
   \frametitle{Contribution of Shuman et al.}
+  This is a tutorial review paper:
+  
   \begin{itemize}
-  \item This is a tutorial review paper
+  \item Reviews existing work
+  \item Provides definitions for graph signal operations and transforms (e.g. graph
+    signal translation, graph Fourier transform)
+  \item Provides example implementations (e.g. Tikhonov regularization, wavelet filtering)
+  \item Summarizes open issues in the field
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Topics}
+  \begin{itemize}
+  \item Challenges of signal processing on graphs
+  \item The Graph Laplacian
+  \item Definition of the Graph Fourier transform
+  \item Metrics of signal smoothness
+  \item Generalized operators for signals on graphs
+    \begin{itemize}
+    \item Filtering
+    \item Translation
+    \item Convolution
+    \item Modulation and Dilation
+    \end{itemize}
+  \item Graph coarsening
+  \item Graph wavelet filtering
+  \end{itemize}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Challenges of graph signal processing}
@@ -148,6 +179,16 @@ University of Michigan \\ % Your institution for the title page
     \item Translation, downsampling and modulation of signals in the graph
       domain
     \item How to implement filtering operations on graphs
+  \end{itemize}
+
+  Challenges:
+  \begin{itemize}
+  \item Graphs are irregular structures that lack a shift-invariant notion of translation.
+  \item Modulation is nontrivial, given that the graph frequency spectrum is
+    discrete and irregularly spaced.
+  \item Downsampling is nontrivial, as there is no notion of ``every other
+    vertex''.
+  \item How can we capture the structure of the graph in downsampling operations?
   \end{itemize}
 \end{frame}
 
@@ -170,9 +211,16 @@ eigenfunctions of the Laplace operator:
 
 \begin{block}{Classical Fourier transform in terms of the Laplace operator}
   \begin{equation}
-    - \Delta (e^{2 \pi j \xi t}) = \frac{\partial^2}{\partial t^2} e^{2 \pi j \xi t} = 4 \pi^2 \xi^2 e^{2 \pi j \xi t} = k e^{2 \pi j \xi t}
+    - \Delta (e^{2 \pi j \xi t}) = - \frac{\partial^2}{\partial t^2} e^{2 \pi j \xi t} = 4 \pi^2 \xi^2 e^{2 \pi j \xi t} = k e^{2 \pi j \xi t}
   \end{equation}
 \end{block}
+\end{frame}
+
+\begin{frame}  
+  \frametitle{Classical Fourier Transform}
+\begin{figure}
+\includegraphics[width=0.7\linewidth]{../img/graph_fourier_transform_0.pdf}
+\end{figure}
 \end{frame}
 
 
@@ -214,11 +262,47 @@ components.
     \end{equation}
   \end{block}
 
+  \begin{block}{The Graph Fourier Transform (alt.)}
+    \begin{equation}
+      \hat{\mathbf{f}} = U^* \mathbf{f}
+    \end{equation}
+  \end{block}
+  
   \begin{itemize}
     \item Eigenvectors associated with the smallest eigenvalues vary slowly across
       the graph.
     \item Eigenvectors associated with the largest eigenvalues oscillate rapidly.
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Eigenvectors of the Laplacian of the Minnesota Road Network}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 10cm 0 0},clip,width=\linewidth]{../img/graph_fourier_transform_5.pdf}
+\end{figure}
+  \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 0 0 16cm},clip,width=\linewidth]{../img/graph_fourier_transform_5.pdf}
+\end{figure}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Fourier transform of a graph signal on a ring graph}
+\begin{figure}
+\includegraphics[width=0.7\linewidth]{../img/graph_fourier_transform_2.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Signal smoothness depends on underlying structure of graph}
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{../img/signal_smoothness_0.pdf}
+\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -266,6 +350,7 @@ components.
 $S_2$ is small when $f$ has similar values at strongly-connected vertices.
 
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Alternatives to the Graph Laplacian}
@@ -322,6 +407,31 @@ $S_2$ is small when $f$ has similar values at strongly-connected vertices.
   \end{block}
   
 \end{frame}
+
+\begin{frame}
+  \frametitle{Example: Gaussian Filtering}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 10cm 0 0},clip,width=\linewidth]{../img/basic_operations_1.pdf}
+\end{figure}
+  \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 0 0 20cm},clip,width=\linewidth]{../img/basic_operations_1.pdf}
+\end{figure}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Filtering example: Tikhonov regularization}
+\begin{figure}
+\includegraphics[width=0.5\linewidth]{../img/tikhonov_regularization_2.pdf}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Filtering in the time/vertex domain}
@@ -402,6 +512,23 @@ Where:
 \end{frame}
 
 \begin{frame}
+  \frametitle{Graph signal translation example}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 16cm 0 0},clip,width=\linewidth]{../img/basic_operations_0.pdf}
+\end{figure}
+  \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 0 0 15cm},clip,width=\linewidth]{../img/basic_operations_0.pdf}
+\end{figure}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Modulation}
 
   In simple terms, like a ``translation'' in the frequency domain.
@@ -429,6 +556,23 @@ Where:
 \end{frame}
 
 \begin{frame}
+  \frametitle{Graph signal modulation example}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 10cm 0 0},clip,width=\linewidth]{../img/basic_operations_3.pdf}
+\end{figure}
+  \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 0 0 20cm},clip,width=\linewidth]{../img/basic_operations_3.pdf}
+\end{figure}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Dilation}
 
   \begin{block}{Classical dilation}
@@ -450,6 +594,23 @@ Where:
 \end{frame}
 
 \begin{frame}
+  \frametitle{Graph signal dilation example}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 10cm 0 0},clip,width=0.9\linewidth]{../img/basic_operations_4.pdf}
+\end{figure}
+  \end{column}
+    \begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics[trim={0 0 0 20cm},clip,width=0.9\linewidth]{../img/basic_operations_4.pdf}
+\end{figure}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}
   \frametitle{Graph coarsening, downsampling and reduction}
 
   \begin{itemize}
@@ -460,6 +621,24 @@ Where:
   \item Minimize number of edges connecting two vertices in a downsampled subset
   \end{itemize}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Example: Spectral clustering}
+\begin{figure}
+\includegraphics[trim={1cm 0.7cm 2cm 0},clip,width=0.9\linewidth]{../img/clustering_methods_1.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example: Recursive spectral bisection}
+\begin{figure}
+\includegraphics[trim={1cm 0.7cm 0 0},clip,width=0.5\linewidth]{../img/clustering_methods_2.pdf}
+\end{figure}
+\begin{figure}
+\includegraphics[trim={1cm 0.7cm 0 0},clip,width=0.5\linewidth]{../img/clustering_methods_3.pdf}
+\end{figure}
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Localized multiscale transforms}
@@ -497,45 +676,80 @@ Where:
   \end{block}  
  \end{frame} 
   
+ \begin{frame}
+   \frametitle{Wavelets in the vertex domain}
+    The wavelet function $\Psi$ at scale k and center vertex i is defined by:
 
+  \begin{block}{Wavelet in the vertex domain around a vertex i}
+  \begin{equation}
+  \Psi_{k,i}^{CKWT} (j) = \frac{a_{k, \tau}}{|\partial N_{(i, \tau)}|}, \forall j \in \partial N(i, \tau)
+  \end{equation}
+  \end{block}
 
-%------------------------------------------------
+  Where $\partial N_{(i, \tau)}$ is the set of all vertices $j \in N$ such that the geodesic distance between $i$ and $j$ is $\tau$. $a_{k, \tau}$ is a set of coefficients that approximate the continuous wavelet function. 
+
+  \begin{block}{Wavelet Transform}
+  \begin{equation}
+  \mathbf{\Psi}_{k}^{CKWT} = [\Psi_{k,1}^{CKWT} ; \Psi_{k,2}^{CKWT} \cdots \Psi_{k,N}^{CKWT}]
+  \end{equation}
+  \end{block}
+ 
+ \end{frame}
+ 
+\begin{frame}
+  \frametitle{Example: Ricker wavelet}
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{../img/wavelet_filter_0.pdf}
+\end{figure}
+\end{frame}
 
 \begin{frame}
-\frametitle{Figure}
-Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-%\begin{figure}
-%\includegraphics[width=0.8\linewidth]{test}
-%\end{figure}
+  \frametitle{Example: Applying Ricker Wavelet Transform for edge detection}
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{../img/wavelet_filter_1.pdf}
+\end{figure}
 \end{frame}
 
-%------------------------------------------------
-
-\begin{frame}[fragile] % Need to use the fragile option when verbatim is used in the slide
-\frametitle{Citation}
-An example of the \verb|\cite| command to cite within the presentation:\\~
-
-This statement requires citation \cite{p1}.
+\begin{frame}
+  \frametitle{Example: Tradeoff between spectral and spatial spread}
+\begin{figure}
+\includegraphics[width=0.9\linewidth]{../img/wavelet_filter_7.pdf}
+\end{figure}
 \end{frame}
-
-%------------------------------------------------
-
+ 
 \section{Strengths and weaknesses}
 
-\section{Reproducibility}
+\begin{frame}
+  \frametitle{Strengths and weaknesses}
+  Strengths:
 
+  \begin{itemize}
+  \item Highly accessible
+  \item Comprehensive introduction to signal processing on graphs
+  \item Excellent examples and illustrations from different fields
+  \end{itemize}
+
+  Weaknesses:
+
+  \begin{itemize}
+  \item Doesn't emphasize computational difficulty of several proposed methods
+  \item Some notation could be simplified
+  \item Some assertions aren't proved or expanded upon
+  \item Couldn't find any code
+  \end{itemize}
+\end{frame}
 \section{Extensions and applications}
 
-
 \begin{frame}
-\frametitle{References}
-\footnotesize{
-\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below
-\bibitem[Smith, 2012]{p1} John Smith (2012)
-\newblock Title of the publication
-\newblock \emph{Journal Name} 12(3), 45 -- 678.
-\end{thebibliography}
-}
+  \frametitle{Extensions and applications}
+  \begin{itemize}
+    \item Little is known about how the structure of the graph affects transforms
+    \item Unclear when to use different graph matrices (Laplacian, Normalized
+      Laplacian, etc.)
+    \item Unclear when to use different distance metrics (geodesic, algebraic,
+      diffusion, resistance, etc.)
+    \item Computing the eigendecomposition of the Laplacian is \textbf{slow}
+  \end{itemize}
 \end{frame}
 
 
@@ -552,14 +766,5 @@ corresponds to the continuous Laplacian as $\epsilon \rightarrow 0$:
   \end{block}
 
 \end{frame}
-
-
-%------------------------------------------------
-
-\begin{frame}
-\Huge{\centerline{The End}}
-\end{frame}
-
-%----------------------------------------------------------------------------------------
 
 \end{document} 
